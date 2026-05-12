@@ -1,39 +1,56 @@
+# Nome que aparece na aba Actions do GitHub.
 name: Cypress Tests
 
+# Define quando a pipeline deve ser executada.
 on:
+  # Executa automaticamente quando houver push na branch main.
   push:
     branches:
       - main
+  # Executa tambem quando um pull request apontar para a branch main.
   pull_request:
     branches:
       - main
+  # Permite rodar a pipeline manualmente pela interface do GitHub.
   workflow_dispatch:
 
+# Agrupa os jobs que fazem parte desta pipeline.
 jobs:
   cypress:
+    # Nome amigavel exibido durante a execucao.
     name: Executa testes Cypress
+    # Ambiente virtual usado pelo GitHub Actions para rodar os testes.
     runs-on: ubuntu-latest
 
+    # Configura o fuso horario usado durante a execucao.
     env:
       TZ: America/Sao_Paulo
 
+    # Lista de etapas executadas em ordem.
     steps:
+      # Baixa o codigo do repositorio para dentro do ambiente do GitHub Actions.
       - name: Baixar projeto
         uses: actions/checkout@v4
 
+      # Instala e configura a versao do Node.js usada pelo projeto.
       - name: Configurar Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          # Usa cache do npm para deixar as proximas execucoes mais rapidas.
           cache: npm
 
+      # Instala as dependencias exatamente como definido no package-lock.json.
       - name: Instalar dependencias
         run: npm ci
 
+      # Executa todos os cenarios Cypress configurados no projeto.
       - name: Executar testes
         run: npm test
 
+      # Salva logs, prints e videos como artefatos da execucao.
       - name: Publicar evidencias da execucao
+        # Garante a publicacao das evidencias mesmo se algum teste falhar.
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -42,4 +59,5 @@ jobs:
             evidencias/execucoes
             cypress/screenshots
             cypress/videos
+          # Evita falha no upload caso alguma pasta ainda nao tenha sido criada.
           if-no-files-found: ignore
