@@ -1,0 +1,45 @@
+name: Cypress Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  cypress:
+    name: Executa testes Cypress
+    runs-on: ubuntu-latest
+
+    env:
+      TZ: America/Sao_Paulo
+
+    steps:
+      - name: Baixar projeto
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Executar testes
+        run: npm test
+
+      - name: Publicar evidencias da execucao
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidencias-cypress
+          path: |
+            evidencias/execucoes
+            cypress/screenshots
+            cypress/videos
+          if-no-files-found: ignore
