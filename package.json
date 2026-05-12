@@ -1,0 +1,26 @@
+{
+  "name": "qa-serverest-cypress",
+  "version": "1.0.0",
+  "description": "Suíte Cypress para testes E2E e API do ServeRest",
+  "main": "index.js",
+  "scripts": {
+    "cy:open": "node scripts/run-cypress.js open",
+    "cy:run": "node scripts/run-cypress.js run",
+    "test": "node scripts/run-cypress.js run",
+    "test:api": "node scripts/run-cypress.js run --spec \"cypress/e2e/api/**/*.cy.js\"",
+    "test:e2e": "node scripts/run-cypress.js run --spec \"cypress/e2e/frontend/**/*.cy.js\""
+  },
+  "keywords": [
+    "cypress",
+    "serverest",
+    "qa",
+    "e2e",
+    "api"
+  ],
+  "author": "José Douglas",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "cypress": "^15.14.2"
+  }
+}
